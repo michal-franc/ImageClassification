@@ -5,7 +5,7 @@ using System.Text;
 using CSharpCity.Tools.RandomNumberGenerators;
 using System.Drawing;
 
-namespace ImageRecognition
+namespace PatternRecognition
 {
     public static  class ImageGenerator
     {

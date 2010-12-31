@@ -2,20 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E859B41E-346E-456C-87EB-9123CDEA2695}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{04442BD5-571A-42DF-95CC-4F70DD6BFB72}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConsoleTestingApp</RootNamespace>
-    <AssemblyName>ConsoleTestingApp</AssemblyName>
+    <RootNamespace>ImageRecognition</RootNamespace>
+    <AssemblyName>ImageRecognition</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,8 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,8 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MathNet.Numerics">
-      <HintPath>..\ImageRecognition\bin\Debug\MathNet.Numerics.dll</HintPath>
+    <Reference Include="MathNet.Numerics, Version=2010.11.26.814, Culture=neutral, PublicKeyToken=cd8b63ad3d691a37, processorArchitecture=MSIL" />
+    <Reference Include="RandomNumberGenerators">
+      <HintPath>..\..\Generator\Generators\Generators\bin\Debug\RandomNumberGenerators.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,16 +43,18 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=47d7877cb3620160" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Distance\EuclideanDistance.cs" />
+    <Compile Include="Distance\IDistanceAlgorithm.cs" />
+    <Compile Include="ClassyfiAlgorithm\IClassyfiAlgorithm.cs" />
+    <Compile Include="Pattern\PatternClass.cs" />
+    <Compile Include="ImageGenerator.cs" />
+    <Compile Include="ClassyfiAlgorithm\NearestAverage.cs" />
+    <Compile Include="ClassyfiAlgorithm\NearestNeighbour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ImageRecognition\PatternRecognition.csproj">
-      <Project>{04442BD5-571A-42DF-95CC-4F70DD6BFB72}</Project>
-      <Name>PatternRecognition</Name>
-    </ProjectReference>
+    <Compile Include="Pattern\WektorCech.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
