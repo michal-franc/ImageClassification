@@ -37,7 +37,7 @@ namespace PatternRecognition
                 sumy[obj.NumerKlasy] += obj.WektorCech.wartosci[0];
             }
 
-            for (int i = 1; i <= wartosciModalne.Count;i++ )
+            for (int i = 1; i <= wartosciModalne.Count+1;i++ )
             {
                 if (wartosciModalne.ContainsKey(i))
                 {
@@ -47,14 +47,18 @@ namespace PatternRecognition
 
             int numerKlasy = 0;
             double min = double.MaxValue;
-            foreach (PatternClass pClass in wektoryUczace)
+            for (int i = 1; i <= wartosciModalne.Count+1;i++ )
             {
-                if (_dist.CalculateDistance(pClass.WektorCech.wartosci, klasyfikowanyObiekt) < min)
+                if (wartosciModalne.ContainsKey(i))
                 {
-                    pClass.Distance = _dist.CalculateDistance(pClass.WektorCech.wartosci, klasyfikowanyObiekt);
+                    if (_dist.CalculateDistance(new List<double>() { wartosciModalne[i] }, klasyfikowanyObiekt) < min)
+                    {
+                        numerKlasy = i;
+                        min = _dist.CalculateDistance(new List<double>() { wartosciModalne[i] }, klasyfikowanyObiekt);
+                    }
                 }
             }
-            return 0;
+            return numerKlasy;
         }
 
         #endregion

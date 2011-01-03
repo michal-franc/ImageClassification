@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternRecognition", "ImageRecognition\PatternRecognition.csproj", "{04442BD5-571A-42DF-95CC-4F70DD6BFB72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestingApp", "ConsoleTestingApp\ConsoleTestingApp.csproj", "{E859B41E-346E-456C-87EB-9123CDEA2695}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageClassyfication", "ImageClassyfication\ImageClassyfication.csproj", "{19380138-E70A-4D50-8193-CAA1D5B11F6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,16 +25,16 @@ Global
 		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|x86.ActiveCfg = Release|Any CPU
-		{E859B41E-346E-456C-87EB-9123CDEA2695}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{E859B41E-346E-456C-87EB-9123CDEA2695}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{E859B41E-346E-456C-87EB-9123CDEA2695}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{E859B41E-346E-456C-87EB-9123CDEA2695}.Debug|x86.ActiveCfg = Debug|x86
-		{E859B41E-346E-456C-87EB-9123CDEA2695}.Debug|x86.Build.0 = Debug|x86
-		{E859B41E-346E-456C-87EB-9123CDEA2695}.Release|Any CPU.ActiveCfg = Release|x86
-		{E859B41E-346E-456C-87EB-9123CDEA2695}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{E859B41E-346E-456C-87EB-9123CDEA2695}.Release|Mixed Platforms.Build.0 = Release|x86
-		{E859B41E-346E-456C-87EB-9123CDEA2695}.Release|x86.ActiveCfg = Release|x86
-		{E859B41E-346E-456C-87EB-9123CDEA2695}.Release|x86.Build.0 = Release|x86
+		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Debug|x86.ActiveCfg = Debug|x86
+		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Debug|x86.Build.0 = Debug|x86
+		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Release|Any CPU.ActiveCfg = Release|x86
+		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Release|Mixed Platforms.Build.0 = Release|x86
+		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Release|x86.ActiveCfg = Release|x86
+		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

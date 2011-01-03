@@ -7,19 +7,18 @@ namespace PatternRecognition
 {
     public class NearestNeighbour : IClassyfiAlgorithm
     {
-        private int _K = 2;
+        private int _alpha = 2;
         IDistanceAlgorithm _dist;
 
-        public NearestNeighbour(int K,IDistanceAlgorithm dist)
+        public NearestNeighbour(int alpha, IDistanceAlgorithm dist)
         {
-            _K = K;
+            _alpha = alpha;
             _dist = dist;
         }
         #region IImageRecognitionAlgorithm Members
 
         public int Classify(List<PatternClass> wektoryUczace, List<double> klasyfikowanyObiekt)
         {
-            int numerKlasy = 0;
             double min = double.MaxValue;
             foreach (PatternClass pClass in wektoryUczace)
             {
@@ -43,7 +42,7 @@ namespace PatternRecognition
 
                 licznikKlas[p.NumerKlasy]++;
                 i++;
-                if (i >= 3)
+                if (i >= _alpha)
                 {
                     break;
                 }

@@ -46,9 +46,13 @@
     <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=47d7877cb3620160" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassyfiAlgorithm\NaiveBayes.cs" />
+    <Compile Include="Common.cs" />
     <Compile Include="Distance\EuclideanDistance.cs" />
     <Compile Include="Distance\IDistanceAlgorithm.cs" />
     <Compile Include="ClassyfiAlgorithm\IClassyfiAlgorithm.cs" />
+    <Compile Include="Distribution.cs" />
+    <Compile Include="GeneratorType.cs" />
     <Compile Include="Pattern\PatternClass.cs" />
     <Compile Include="ImageGenerator.cs" />
     <Compile Include="ClassyfiAlgorithm\NearestAverage.cs" />
