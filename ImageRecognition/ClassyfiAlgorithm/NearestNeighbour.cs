@@ -5,6 +5,9 @@ using System.Text;
 
 namespace PatternRecognition
 {
+    /// <summary>
+    /// Implementation of the Nearest Neighbour Algorithm
+    /// </summary>
     public class NearestNeighbour : IClassyfiAlgorithm
     {
         private int _alpha = 2;
@@ -17,30 +20,30 @@ namespace PatternRecognition
         }
         #region IImageRecognitionAlgorithm Members
 
-        public int Classify(List<PatternClass> wektoryUczace, List<double> klasyfikowanyObiekt)
+        public int Classify(List<PatternClass> teachingVectors, List<double> classyfiedObject)
         {
             double min = double.MaxValue;
-            foreach (PatternClass pClass in wektoryUczace)
+            foreach (PatternClass pClass in teachingVectors)
             {
-                if (_dist.CalculateDistance(pClass.FeatureVector.Values, klasyfikowanyObiekt) < min)
+                if (_dist.CalculateDistance(pClass.FeatureVector.Values, classyfiedObject) < min)
                 {
-                    pClass.Distance = _dist.CalculateDistance(pClass.FeatureVector.Values, klasyfikowanyObiekt);
+                    pClass.Distance = _dist.CalculateDistance(pClass.FeatureVector.Values, classyfiedObject);
                 }
             }
 
-            var posortowaneOdleglosci = from w in wektoryUczace orderby w.Distance ascending select w;
+            var sortedDistances = from w in teachingVectors orderby w.Distance ascending select w;
 
-            Dictionary<int , int> licznikKlas = new Dictionary<int,int>();
+            Dictionary<int , int> classCounter = new Dictionary<int,int>();
 
             int i = 0;
-            foreach(PatternClass p in posortowaneOdleglosci )
+            foreach(PatternClass p in sortedDistances )
             {
-                if(!licznikKlas.ContainsKey(p.ClassNumber))
+                if(!classCounter.ContainsKey(p.ClassNumber))
                 {
-                    licznikKlas.Add(p.ClassNumber,0);
+                    classCounter.Add(p.ClassNumber,0);
                 }
 
-                licznikKlas[p.ClassNumber]++;
+                classCounter[p.ClassNumber]++;
                 i++;
                 if (i >= _alpha)
                 {
@@ -48,7 +51,7 @@ namespace PatternRecognition
                 }
             }
 
-            return (from w in licznikKlas orderby w.Value descending select w.Key).First();
+            return (from w in classCounter orderby w.Value descending select w.Key).First();
         }
 
         #endregion

@@ -7,6 +7,6 @@ namespace PatternRecognition
 {
     public interface IClassyfiAlgorithm
     {
-        int Classify(List<PatternClass> wektoryUczace, List<double> klasyfikowanyObiekt);
+        int Classify(List<PatternClass> teachingVectors, List<double> classyfiedObject);
     }
 }

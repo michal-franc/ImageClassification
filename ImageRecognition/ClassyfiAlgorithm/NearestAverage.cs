@@ -5,6 +5,9 @@ using System.Text;
 
 namespace PatternRecognition
 {
+    /// <summary>
+    /// Implementation of the Nearest Average Algorithm
+    /// </summary>
     public class NearestAverage : IClassyfiAlgorithm
     {
         private IDistanceAlgorithm _dist;
@@ -18,47 +21,45 @@ namespace PatternRecognition
 
         #region IClassyfiAlgorithm Members
 
-        public int Classify(List<PatternClass> wektoryUczace, List<double> klasyfikowanyObiekt)
+        public int Classify(List<PatternClass> teachingVectors, List<double> classyfiedObject)
         {
+            Dictionary<int, double> averageValues = new Dictionary<int, double>();
+            Dictionary<int, double> sums = new Dictionary<int,double>();
 
-            //1. obliczyc wartosci modalne (srednie)
-            Dictionary<int, double> wartosciModalne = new Dictionary<int, double>();
-            Dictionary<int, double> sumy = new Dictionary<int,double>();
-
-            foreach (PatternClass obj in wektoryUczace)
+            foreach (PatternClass obj in teachingVectors)
             {
-                if (!wartosciModalne.ContainsKey(obj.ClassNumber))
+                if (!averageValues.ContainsKey(obj.ClassNumber))
                 {
-                    wartosciModalne.Add(obj.ClassNumber, 0);
-                    sumy.Add(obj.ClassNumber,0);
+                    averageValues.Add(obj.ClassNumber, 0);
+                    sums.Add(obj.ClassNumber,0);
                 }
 
-                wartosciModalne[obj.ClassNumber]++;
-                sumy[obj.ClassNumber] += obj.FeatureVector.Values[0];
+                averageValues[obj.ClassNumber]++;
+                sums[obj.ClassNumber] += obj.FeatureVector.Values[0];
             }
 
-            for (int i = 1; i <= wartosciModalne.Count+1;i++ )
+            for (int i = 1; i <= averageValues.Count+1;i++ )
             {
-                if (wartosciModalne.ContainsKey(i))
+                if (averageValues.ContainsKey(i))
                 {
-                    wartosciModalne[i] = sumy[i] / wartosciModalne[i];
+                    averageValues[i] = sums[i] / averageValues[i];
                 }
             }
 
-            int numerKlasy = 0;
+            int classNumber = 0;
             double min = double.MaxValue;
-            for (int i = 1; i <= wartosciModalne.Count+1;i++ )
+            for (int i = 1; i <= averageValues.Count+1;i++ )
             {
-                if (wartosciModalne.ContainsKey(i))
+                if (averageValues.ContainsKey(i))
                 {
-                    if (_dist.CalculateDistance(new List<double>() { wartosciModalne[i] }, klasyfikowanyObiekt) < min)
+                    if (_dist.CalculateDistance(new List<double>() { averageValues[i] }, classyfiedObject) < min)
                     {
-                        numerKlasy = i;
-                        min = _dist.CalculateDistance(new List<double>() { wartosciModalne[i] }, klasyfikowanyObiekt);
+                        classNumber = i;
+                        min = _dist.CalculateDistance(new List<double>() { averageValues[i] }, classyfiedObject);
                     }
                 }
             }
-            return numerKlasy;
+            return classNumber;
         }
 
         #endregion
