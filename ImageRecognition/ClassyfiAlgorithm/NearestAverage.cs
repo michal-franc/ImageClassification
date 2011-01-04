@@ -27,14 +27,14 @@ namespace PatternRecognition
 
             foreach (PatternClass obj in wektoryUczace)
             {
-                if (!wartosciModalne.ContainsKey(obj.NumerKlasy))
+                if (!wartosciModalne.ContainsKey(obj.ClassNumber))
                 {
-                    wartosciModalne.Add(obj.NumerKlasy, 0);
-                    sumy.Add(obj.NumerKlasy,0);
+                    wartosciModalne.Add(obj.ClassNumber, 0);
+                    sumy.Add(obj.ClassNumber,0);
                 }
 
-                wartosciModalne[obj.NumerKlasy]++;
-                sumy[obj.NumerKlasy] += obj.WektorCech.wartosci[0];
+                wartosciModalne[obj.ClassNumber]++;
+                sumy[obj.ClassNumber] += obj.FeatureVector.Values[0];
             }
 
             for (int i = 1; i <= wartosciModalne.Count+1;i++ )

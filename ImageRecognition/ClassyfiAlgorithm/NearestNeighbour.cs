@@ -22,9 +22,9 @@ namespace PatternRecognition
             double min = double.MaxValue;
             foreach (PatternClass pClass in wektoryUczace)
             {
-                if (_dist.CalculateDistance(pClass.WektorCech.wartosci, klasyfikowanyObiekt) < min)
+                if (_dist.CalculateDistance(pClass.FeatureVector.Values, klasyfikowanyObiekt) < min)
                 {
-                    pClass.Distance = _dist.CalculateDistance(pClass.WektorCech.wartosci, klasyfikowanyObiekt);
+                    pClass.Distance = _dist.CalculateDistance(pClass.FeatureVector.Values, klasyfikowanyObiekt);
                 }
             }
 
@@ -35,12 +35,12 @@ namespace PatternRecognition
             int i = 0;
             foreach(PatternClass p in posortowaneOdleglosci )
             {
-                if(!licznikKlas.ContainsKey(p.NumerKlasy))
+                if(!licznikKlas.ContainsKey(p.ClassNumber))
                 {
-                    licznikKlas.Add(p.NumerKlasy,0);
+                    licznikKlas.Add(p.ClassNumber,0);
                 }
 
-                licznikKlas[p.NumerKlasy]++;
+                licznikKlas[p.ClassNumber]++;
                 i++;
                 if (i >= _alpha)
                 {

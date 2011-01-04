@@ -11,51 +11,67 @@ namespace ImageRecognition
     {
          public static ContinuousUniform probabilityGenerator = new ContinuousUniform(0, 1);
 
-         public static List<PatternClass> CreateWektoryUczaceUniform(double p1, double p2, IContinuousDistribution generator1, IContinuousDistribution generator2, int iloscWektorowUczacych)
+         /// <summary>
+         /// Creates Teaching Vectors
+         /// </summary>
+         /// <param name="p1"></param>
+         /// <param name="p2"></param>
+         /// <param name="generator1"></param>
+         /// <param name="generator2"></param>
+         /// <param name="nrOfTeachingVectors"></param>
+         /// <returns></returns>
+         public static List<PatternClass> CreateTeachingVectors(double p1, double p2, IContinuousDistribution generator1, IContinuousDistribution generator2, int nrOfTeachingVectors)
         {
-            List<PatternClass> wyjsciowaLista = new List<PatternClass>();
+             List<PatternClass> createdTeachingVectors = new List<PatternClass>();
 
-            for (int i = 0; i < iloscWektorowUczacych; i++)
+            for (int i = 0; i < nrOfTeachingVectors; i++)
             {
-                double wartosc = 0;
-                int numerKlasy = CreateClass(p1, p2);
+                double value = 0;
+                int classNumber = CreateClass(p1, p2);
 
-                if (numerKlasy == 1)
-                    wartosc = generator1.Sample();
-                else if (numerKlasy == 2)
-                    wartosc = generator2.Sample();
+                if (classNumber == 1)
+                    value = generator1.Sample();
+                else if (classNumber == 2)
+                    value = generator2.Sample();
 
-                wyjsciowaLista.Add(new PatternClass(new WektorCech(wartosc), numerKlasy));
+                createdTeachingVectors.Add(new PatternClass(new FeatureVector(value), classNumber));
             }
 
-            return wyjsciowaLista;
+            return createdTeachingVectors;
         }
 
+         /// <summary>
+         ///  Gives class number based on the prpability of a class
+         /// </summary>
+         /// <param name="propabilityOfClass1"></param>
+         /// <param name="propabilityOfClass2"></param>
+         /// <returns></returns>
         public static int CreateClass(double propabilityOfClass1, double propabilityOfClass2)
         {
             double p = probabilityGenerator.Sample();
             if (p <= propabilityOfClass1)
-            {
                 return 1;
-            }
             else if (1 - propabilityOfClass2 < p)
-            {
                 return 2;
-            }
             else
                 return 0;
         }
-
-        public static List<PatternClass> CreateObject(IContinuousDistribution generator,int count,int classNumber)
+        /// <summary>
+        /// Creates the list of objects with specified class
+        /// </summary>
+        /// <param name="generator"></param>
+        /// <param name="count"></param>
+        /// <param name="classNumber"></param>
+        /// <returns></returns>
+        public static List<PatternClass> CreateSampleObject(IContinuousDistribution generator,int count,int classNumber)
         {
-            List<PatternClass> returnObjects = new List<PatternClass>();
+            List<PatternClass> sampleObjects = new List<PatternClass>();
 
             for (int i = 0; i < count; i++)
             {
-                returnObjects.Add(new PatternClass(new WektorCech(generator.Sample()), classNumber));
+                sampleObjects.Add(new PatternClass(new FeatureVector(generator.Sample()), classNumber));
             }
-
-            return returnObjects;
+            return sampleObjects;
         }
 
 

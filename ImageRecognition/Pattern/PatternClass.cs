@@ -5,16 +5,19 @@ using System.Text;
 
 namespace PatternRecognition
 {
+    /// <summary>
+    /// Class Representing Object with Class And Feature Vector
+    /// </summary>
     public class PatternClass
     {
-        public WektorCech WektorCech {get;set;}
-        public int NumerKlasy { get; set; }
+        public FeatureVector FeatureVector {get;set;}
+        public int ClassNumber { get; set; }
         public double Distance { get; set; }
 
-        public PatternClass(WektorCech cechy, int klasa)
+        public PatternClass(FeatureVector features, int classNumber)
         {
-            WektorCech = cechy;
-            NumerKlasy = klasa;
+            FeatureVector = features;
+            ClassNumber = classNumber;
         }
 
     }

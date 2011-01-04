@@ -140,10 +140,10 @@ namespace ImageClassyfication
             for (int i = 0; i < IloscProb; i++)
             {
 
-                List<PatternClass> wektoryUczace = Common.CreateWektoryUczaceUniform(P1, P2, generator1, generator2, IloscWektorow);
+                List<PatternClass> wektoryUczace = Common.CreateTeachingVectors(P1, P2, generator1, generator2, IloscWektorow);
 
-                List<PatternClass> obiektyTestowe = Common.CreateObject(generator1, IloscTestowychProbek/2, 1);
-                obiektyTestowe.InsertRange(obiektyTestowe.Count,Common.CreateObject(generator2, IloscTestowychProbek/2, 2));
+                List<PatternClass> obiektyTestowe = Common.CreateSampleObject(generator1, IloscTestowychProbek / 2, 1);
+                obiektyTestowe.InsertRange(obiektyTestowe.Count, Common.CreateSampleObject(generator2, IloscTestowychProbek / 2, 2));
 
 
 
@@ -151,7 +151,7 @@ namespace ImageClassyfication
 
                 foreach (PatternClass pClass in obiektyTestowe)
                 {
-                    if (averageAlg.Classify(wektoryUczace, pClass.WektorCech.wartosci) == pClass.NumerKlasy)
+                    if (averageAlg.Classify(wektoryUczace, pClass.FeatureVector.Values) == pClass.ClassNumber)
                     {
                         averageCounter++;
                     }
@@ -162,7 +162,7 @@ namespace ImageClassyfication
 
                 foreach (PatternClass pClass in obiektyTestowe)
                 {
-                    if (nearestNeighbour.Classify(wektoryUczace, pClass.WektorCech.wartosci) == pClass.NumerKlasy)
+                    if (nearestNeighbour.Classify(wektoryUczace, pClass.FeatureVector.Values) == pClass.ClassNumber)
                     {
                         nearestCounter++;
                     }
@@ -172,7 +172,7 @@ namespace ImageClassyfication
 
                 foreach (PatternClass pClass in obiektyTestowe)
                 {
-                    if (naiveBayes.Classify(generator1, generator2, P1, P2, pClass.WektorCech.wartosci) == pClass.NumerKlasy)
+                    if (naiveBayes.Classify(generator1, generator2, P1, P2, pClass.FeatureVector.Values) == pClass.ClassNumber)
                     {
                         naiveBayesCounter++;
                     }
