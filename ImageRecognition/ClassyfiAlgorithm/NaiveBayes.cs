@@ -53,7 +53,7 @@ namespace ImageRecognition.ClassyfiAlgorithm
         }
 
         //Find the common point beetwen 2 distributions
-        private bool FindCommonPoint(IContinuousDistribution dist1,IContinuousDistribution dist2,ref double commonPoint)
+        public bool FindCommonPoint(IContinuousDistribution dist1,IContinuousDistribution dist2,ref double commonPoint)
         {
             bool found = false;
             if (dist2.Mean > dist1.Mean)
