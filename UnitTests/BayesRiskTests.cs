@@ -9,7 +9,7 @@ using ImageRecognition.ClassyfiAlgorithm;
 namespace UnitTests
 {
     [TestFixture]
-    public class BayesRisk
+    public class BayesRiskTests
     {
         [Test]
         public void SameVariance()
