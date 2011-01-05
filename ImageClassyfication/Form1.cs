@@ -66,6 +66,110 @@ namespace ImageClassyfication
             }
         }
 
+        public double FirstFeatureA1
+        {
+            get
+            {
+                return double.Parse(textBoxFirstFeatureA1.Text);
+            }
+        }
+
+        public double FirstFeatureA2
+        {
+            get
+            {
+                 return double.Parse(textBoxFirstFeatureA2.Text);
+            }
+        }
+
+        public double FirstFeatureB1
+        {
+            get
+            {
+                return double.Parse(textBoxFirstFeatureB1.Text);
+            }
+        }
+
+        public double FirstFeatureB2
+        {
+            get
+            {
+                return double.Parse(textBoxFirstFeatureB2.Text);
+            }
+        }
+
+        public double SecondFeatureA1
+        {
+            get
+            {
+                return double.Parse(textBoxSecondFeatureA1.Text);
+            }
+        }
+
+        public double SecondFeatureA2
+        {
+            get
+            {
+                return double.Parse(textBoxSecondFeatureA2.Text);
+            }
+        }
+
+        public double SecondFeatureB1
+        {
+            get
+            {
+                return double.Parse(textBoxSecondFeatureB1.Text);
+            }
+        }
+
+        public double SecondFeatureB2
+        {
+            get
+            {
+                return double.Parse(textBoxSecondFeatureB2.Text);
+            }
+        }
+
+        public double TwoDimNrOfSamples
+        {
+            get
+            {
+                return double.Parse(textBox2DimNrOfSampleObjects.Text);
+            }
+        }
+
+        public double TwoDimNrOfTries
+        {
+            get
+            {
+                return double.Parse(textBox2DimNrOfTries.Text);
+            }
+        }
+
+        public double TwoDimNrOfTeachingVectors
+        {
+            get
+            {
+                return double.Parse(textBox2DimNVectors.Text);
+            }
+        }    
+
+        public double TwoDimP1
+        {
+            get
+            {
+                return double.Parse(textBoxTwoDimP1.Text);
+            }
+        }
+
+        public double TwoDimP2
+        {
+            get
+            {
+                return double.Parse(textBox2DimP2.Text);
+            }
+        }
+        
         public int IloscWektorow
         {
             get
@@ -130,7 +234,11 @@ namespace ImageClassyfication
             {
                 generator1 = new ContinuousUniform(A1, A2);
                 generator2 = new ContinuousUniform(B1, B2);
-            }
+            }       
+            
+            chartDistribution.Series.Add(CreateDistributionSerie(generator1));
+            chartDistribution.Series.Add(CreateDistributionSerie(generator2));
+            chartDistribution.Update();                
 
             double naiveBayesCounter = 0;
             double bayesRisk = 0.0;
@@ -197,12 +305,7 @@ namespace ImageClassyfication
                 series1.Points.Add(new DataPoint(i, value));
             }
 
-          
 
-
-            chartDistribution.Series.Add(series1);
-            chartDistribution.Series.Add(series);
-            chartDistribution.Update();                
 
             double nearestAlgorithmError = 100-((nearestCounter *100.0 )/ (IloscTestowychProbek*IloscProb));
             double avgAlgorithmError = 100-((averageCounter*100.0 )/ (IloscTestowychProbek*IloscProb));
@@ -211,12 +314,78 @@ namespace ImageClassyfication
             textBoxData.Text = String.Format("Neares : {0} \n Average {1} \n Bayes {2} \n Baies Risk {3}", nearestAlgorithmError, avgAlgorithmError, naiveBayesError, bayesRisk);
         }
 
+        private Series CreateDistributionSerie(IContinuousDistribution distributionn)
+        {
+            Series createdSerie = new Series();
+            createdSerie.ChartType = SeriesChartType.SplineArea;
+
+            for (double i = distributionn.Mean - (8 * distributionn.StdDev); i < distributionn.Mean + (8 * distributionn.StdDev); i += 0.5)
+            {
+                createdSerie.Points.Add(new DataPoint(i, distributionn.Density(i)));
+            }
+
+            return createdSerie;
+        }
+
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.ShowDialog();
 
             pictureBox1.Image = Bitmap.FromFile(dialog.FileName);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCalculate2Dim_Click(object sender, EventArgs e)
+        {
+            chartFirstFeatureDistribution.Series.Clear();
+            chartFirstFeatureDistribution.ResetAutoValues();
+
+            chartSecondFeatureDistribution.Series.Clear();
+            chartSecondFeatureDistribution.ResetAutoValues();
+
+            chartXYDistribution.Series.Clear();
+            chartXYDistribution.ResetAutoValues();
+
+
+            IContinuousDistribution generatorFirstFeature1 = null;
+            IContinuousDistribution generatorFirstFeature2 = null;
+
+            IContinuousDistribution generatorSecondFeature1 = null;
+            IContinuousDistribution generatorSecondFeature2 = null;
+
+            if (SelectedGenerator == GeneratorType.Normal)
+            {
+                generatorFirstFeature1 = new Normal(FirstFeatureA1, FirstFeatureA2);
+                generatorFirstFeature2 = new Normal(FirstFeatureB1, FirstFeatureB2);
+                generatorSecondFeature1 = new Normal(SecondFeatureA1,SecondFeatureA2);
+                generatorSecondFeature2 = new Normal(SecondFeatureB1,SecondFeatureB2);
+
+            }
+            else if (SelectedGenerator == GeneratorType.Uniform)
+            {
+                generatorFirstFeature1 = new ContinuousUniform(FirstFeatureA1, FirstFeatureA2);
+                generatorFirstFeature2 = new ContinuousUniform(FirstFeatureB1, FirstFeatureB2);
+                generatorSecondFeature1 = new ContinuousUniform(SecondFeatureA1,SecondFeatureA2);
+                generatorSecondFeature2 = new ContinuousUniform(SecondFeatureB1, SecondFeatureB2);
+            }
+
+            chartFirstFeatureDistribution.Series.Add(CreateDistributionSerie(generatorFirstFeature1));
+            chartFirstFeatureDistribution.Series.Add(CreateDistributionSerie(generatorFirstFeature2));
+            chartSecondFeatureDistribution.Series.Add(CreateDistributionSerie(generatorSecondFeature1));
+            chartSecondFeatureDistribution.Series.Add(CreateDistributionSerie(generatorSecondFeature2));
+
+            //Create Training Vectors
+            //Draw Training vectors on XY chart
+            // Draw simple Area of training vectors on XYChart
+            //Create SampleObjects
+            //Classyfi objects
+            //Put those objects on XY chart green - good classyfication , red - bad classyfication
+            //Create statstics
         }
     }
 }
