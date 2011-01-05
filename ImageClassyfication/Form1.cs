@@ -130,27 +130,27 @@ namespace ImageClassyfication
             }
         }
 
-        public double TwoDimNrOfSamples
+        public int TwoDimNrOfSamples
         {
             get
             {
-                return double.Parse(textBox2DimNrOfSampleObjects.Text);
+                return int.Parse(textBox2DimNrOfSampleObjects.Text);
             }
         }
 
-        public double TwoDimNrOfTries
+        public int TwoDimNrOfTries
         {
             get
             {
-                return double.Parse(textBox2DimNrOfTries.Text);
+                return int.Parse(textBox2DimNrOfTries.Text);
             }
         }
 
-        public double TwoDimNrOfTeachingVectors
+        public int TwoDimNrOfTeachingVectors
         {
             get
             {
-                return double.Parse(textBox2DimNVectors.Text);
+                return int.Parse(textBox2DimNVectors.Text);
             }
         }    
 
@@ -234,8 +234,11 @@ namespace ImageClassyfication
             {
                 generator1 = new ContinuousUniform(A1, A2);
                 generator2 = new ContinuousUniform(B1, B2);
-            }       
-            
+            }
+
+            generator1.RandomSource = new Random(DateTime.Now.Millisecond);
+            generator2.RandomSource = new Random(DateTime.Now.Millisecond + 10);
+
             chartDistribution.Series.Add(CreateDistributionSerie(generator1));
             chartDistribution.Series.Add(CreateDistributionSerie(generator2));
             chartDistribution.Update();                
@@ -374,18 +377,53 @@ namespace ImageClassyfication
                 generatorSecondFeature2 = new ContinuousUniform(SecondFeatureB1, SecondFeatureB2);
             }
 
+            generatorFirstFeature1.RandomSource = new Random(DateTime.Now.Millisecond);
+            generatorFirstFeature2.RandomSource = new Random(DateTime.Now.Millisecond + 10);
+            generatorSecondFeature1.RandomSource = new Random(DateTime.Now.Millisecond + 20);
+            generatorSecondFeature2.RandomSource = new Random(DateTime.Now.Millisecond + 30);
+
             chartFirstFeatureDistribution.Series.Add(CreateDistributionSerie(generatorFirstFeature1));
             chartFirstFeatureDistribution.Series.Add(CreateDistributionSerie(generatorFirstFeature2));
             chartSecondFeatureDistribution.Series.Add(CreateDistributionSerie(generatorSecondFeature1));
             chartSecondFeatureDistribution.Series.Add(CreateDistributionSerie(generatorSecondFeature2));
 
-            //Create Training Vectors
-            //Draw Training vectors on XY chart
+            List<PatternClass> teachingVectors= Common.Create2DimTeachingVectors(TwoDimP1, TwoDimP2, generatorFirstFeature1, generatorFirstFeature2, generatorSecondFeature1, generatorSecondFeature2, TwoDimNrOfTeachingVectors);
+
+            foreach(Series ser in CreateXYSeries(teachingVectors))
+            {
+                chartXYDistribution.Series.Add(ser);
+            }
+            chartXYDistribution.Update();
+
             // Draw simple Area of training vectors on XYChart
             //Create SampleObjects
             //Classyfi objects
             //Put those objects on XY chart green - good classyfication , red - bad classyfication
             //Create statstics
+        }
+
+        private List<Series> CreateXYSeries(List<PatternClass> objects)
+        {
+            Series serie1Class = new Series();
+            serie1Class.ChartType = SeriesChartType.Point;
+
+            Series serie2Class = new Series();
+            serie2Class.ChartType = SeriesChartType.Point;
+
+            foreach (PatternClass obj in objects)
+            {
+                if (obj.ClassNumber == 1)
+                {
+                    serie1Class.Points.Add(new DataPoint(obj.FeatureVector.Values[0], obj.FeatureVector.Values[1]));
+                }
+                else
+                {
+                    serie2Class.Points.Add(new DataPoint(obj.FeatureVector.Values[0], obj.FeatureVector.Values[1]));
+                }
+            }
+
+            return new List<Series>() { serie1Class, serie2Class };
+
         }
     }
 }
