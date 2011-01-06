@@ -57,7 +57,7 @@ namespace PatternRecognition
                         classNumber = i;
                         min = _dist.CalculateDistance(new List<double>() { averageValues[i] }, classyfiedObject);
                     }
-                }
+                } 
             }
             return classNumber;
         }

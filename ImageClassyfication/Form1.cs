@@ -18,6 +18,7 @@ namespace ImageClassyfication
 
     public partial class Form1 : Form
     {
+        #region Properties with parsed data
         public double A1
         {
             get
@@ -78,7 +79,7 @@ namespace ImageClassyfication
         {
             get
             {
-                 return double.Parse(textBoxFirstFeatureA2.Text);
+                return double.Parse(textBoxFirstFeatureA2.Text);
             }
         }
 
@@ -152,7 +153,7 @@ namespace ImageClassyfication
             {
                 return int.Parse(textBox2DimNVectors.Text);
             }
-        }    
+        }
 
         public double TwoDimP1
         {
@@ -169,7 +170,7 @@ namespace ImageClassyfication
                 return double.Parse(textBox2DimP2.Text);
             }
         }
-        
+
         public int IloscWektorow
         {
             get
@@ -206,6 +207,8 @@ namespace ImageClassyfication
                     return GeneratorType.None;
             }
         }
+        
+        #endregion
 
         public Form1()
         {
@@ -291,25 +294,6 @@ namespace ImageClassyfication
                 bayesRisk = naiveBayes.CalculateBayesRisk(generator1, generator2,P1,P2);
             }
 
-            Series series1 = new Series();
-            series1.ChartType = SeriesChartType.SplineArea;
-            Series series = new Series();
-            series.ChartType = SeriesChartType.SplineArea;
-
-            for (double i = generator1.Mean - (8 * generator1.StdDev); i < generator1.Mean + (8 * generator1.StdDev); i += 0.5)
-            {
-                double value = generator1.Density(i);
-                series.Points.Add(new DataPoint(i, value));
-            }
-
-            for (double i = generator2.Mean - (8 * generator2.StdDev); i < generator2.Mean + (8 * generator2.StdDev); i += 0.5)
-            {
-                double value = generator2.Density(i);
-                series1.Points.Add(new DataPoint(i, value));
-            }
-
-
-
             double nearestAlgorithmError = 100-((nearestCounter *100.0 )/ (IloscTestowychProbek*IloscProb));
             double avgAlgorithmError = 100-((averageCounter*100.0 )/ (IloscTestowychProbek*IloscProb));
             double naiveBayesError = 100 - ((naiveBayesCounter * 100.0) / (IloscTestowychProbek * IloscProb));
@@ -317,18 +301,6 @@ namespace ImageClassyfication
             textBoxData.Text = String.Format("Neares : {0} \n Average {1} \n Bayes {2} \n Baies Risk {3}", nearestAlgorithmError, avgAlgorithmError, naiveBayesError, bayesRisk);
         }
 
-        private Series CreateDistributionSerie(IContinuousDistribution distributionn)
-        {
-            Series createdSerie = new Series();
-            createdSerie.ChartType = SeriesChartType.SplineArea;
-
-            for (double i = distributionn.Mean - (8 * distributionn.StdDev); i < distributionn.Mean + (8 * distributionn.StdDev); i += 0.5)
-            {
-                createdSerie.Points.Add(new DataPoint(i, distributionn.Density(i)));
-            }
-
-            return createdSerie;
-        }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
@@ -336,11 +308,6 @@ namespace ImageClassyfication
             dialog.ShowDialog();
 
             pictureBox1.Image = Bitmap.FromFile(dialog.FileName);
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void btnCalculate2Dim_Click(object sender, EventArgs e)
@@ -393,22 +360,67 @@ namespace ImageClassyfication
             {
                 chartXYDistribution.Series.Add(ser);
             }
+
+            List<PatternClass> sampleObjects = Common.Create2dimSampleObject(generatorFirstFeature1, generatorSecondFeature1, TwoDimNrOfSamples/2, 1);
+            sampleObjects.InsertRange(sampleObjects.Count, Common.Create2dimSampleObject(generatorFirstFeature2, generatorSecondFeature2, TwoDimNrOfSamples/2, 2));
+
+            foreach(Series ser in CreateXYSeries(sampleObjects))
+            {
+                chartXYDistribution.Series.Add(ser);
+            }
             chartXYDistribution.Update();
 
-            // Draw simple Area of training vectors on XYChart
-            //Create SampleObjects
             //Classyfi objects
+
+            double naiveBayesCounter = 0;
+            double bayesRisk = 0.0;
+            double averageCounter = 0;
+            double nearestCounter = 0;
+
+            for (int i = 0; i < IloscProb; i++)
+            {
+
+                //NearestAverage averageAlg = new NearestAverage(new EuclideanDistance());
+
+                //foreach (PatternClass pClass in sampleObjects)
+                //{
+                //    if (averageAlg.Classify(teachingVectors, pClass.FeatureVector.Values) == pClass.ClassNumber)
+                //    {
+                //        averageCounter++;
+                //    }
+                //}
+
+
+                NearestNeighbour nearestNeighbour = new NearestNeighbour(1, new EuclideanDistance());
+
+                foreach (PatternClass pClass in sampleObjects)
+                {
+                    if (nearestNeighbour.Classify(teachingVectors, pClass.FeatureVector.Values) == pClass.ClassNumber)
+                    {
+                        nearestCounter++;
+                    }
+                }
+            }
+
+            double nearestAlgorithmError = 100 - ((nearestCounter * 100.0) / (IloscTestowychProbek * IloscProb));
+            double avgAlgorithmError = 100 - ((averageCounter * 100.0) / (IloscTestowychProbek * IloscProb));
+
+            textBoxData.Text = String.Format("Neares : {0} \n Average {1} ", nearestAlgorithmError, avgAlgorithmError);
+
             //Put those objects on XY chart green - good classyfication , red - bad classyfication
             //Create statstics
         }
 
+        #region Chart Helper Methods
         private List<Series> CreateXYSeries(List<PatternClass> objects)
         {
             Series serie1Class = new Series();
             serie1Class.ChartType = SeriesChartType.Point;
+            serie1Class.MarkerSize = 5;
 
             Series serie2Class = new Series();
             serie2Class.ChartType = SeriesChartType.Point;
+            serie2Class.MarkerSize = 5;
 
             foreach (PatternClass obj in objects)
             {
@@ -425,5 +437,20 @@ namespace ImageClassyfication
             return new List<Series>() { serie1Class, serie2Class };
 
         }
+
+
+        private Series CreateDistributionSerie(IContinuousDistribution distributionn)
+        {
+            Series createdSerie = new Series();
+            createdSerie.ChartType = SeriesChartType.SplineArea;
+
+            for (double i = distributionn.Mean - (8 * distributionn.StdDev); i < distributionn.Mean + (8 * distributionn.StdDev); i += 0.5)
+            {
+                createdSerie.Points.Add(new DataPoint(i, distributionn.Density(i)));
+            }
+
+            return createdSerie;
+        } 
+        #endregion
     }
 }

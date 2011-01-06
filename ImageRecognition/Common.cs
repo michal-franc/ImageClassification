@@ -53,11 +53,11 @@ namespace ImageRecognition
                  if (classNumber == 1)
                  {
                      value = generatorFirstFeature1.Sample();
-                     value1 = generatorFirstFeature2.Sample();
+                     value1 = generatorSecondFeature1.Sample();
                  }
                  else if (classNumber == 2)
                  {
-                     value = generatorSecondFeature1.Sample();
+                     value = generatorFirstFeature2.Sample();
                      value1 = generatorSecondFeature2.Sample();
                  }
 
@@ -97,6 +97,17 @@ namespace ImageRecognition
             for (int i = 0; i < count; i++)
             {
                 sampleObjects.Add(new PatternClass(new FeatureVector(generator.Sample()), classNumber));
+            }
+            return sampleObjects;
+        }
+
+        public static List<PatternClass> Create2dimSampleObject(IContinuousDistribution generator, IContinuousDistribution generator1, int count, int classNumber)
+        {
+            List<PatternClass> sampleObjects = new List<PatternClass>();
+
+            for (int i = 0; i < count; i++)
+            {
+                sampleObjects.Add(new PatternClass(new FeatureVector(generator.Sample(), generator1.Sample()), classNumber));
             }
             return sampleObjects;
         }
