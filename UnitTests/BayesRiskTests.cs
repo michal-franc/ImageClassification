@@ -14,7 +14,6 @@ namespace UnitTests
         [Test]
         public void SameVariance()
         {
-         NaiveBayes bayes = new NaiveBayes();
 
          double actualBayesRisk = 30.514;
          double actualCommonPoint =0.5;
@@ -25,9 +24,12 @@ namespace UnitTests
          Normal gen1 =new Normal(0,1);
          Normal gen2 =new Normal(1,1);
 
-         Assert.That(bayes.FindCommonPoint(gen1, gen2, ref testedCommonPoint),Is.True);
+         NaiveBayes bayes = new NaiveBayes(gen1,gen2,p1,p2);
+
+
+         Assert.That(NaiveBayes.FindCommonPoint(gen1, gen2, ref testedCommonPoint), Is.True);
          Assert.That(Math.Abs(actualCommonPoint-testedCommonPoint),Is.LessThan(0.001));
-         Assert.That(Math.Abs(actualBayesRisk - bayes.CalculateBayesRisk(gen1,gen2,p1,p2)), Is.LessThan(0.001));
+         Assert.That(Math.Abs(actualBayesRisk - NaiveBayes.CalculateBayesRisk(gen1, gen2, p1, p2)), Is.LessThan(0.001));
 
         }
     }

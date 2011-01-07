@@ -222,6 +222,7 @@ namespace ImageClassyfication
 
         private void btnCalculate_Click(object sender, EventArgs e)
         {
+            #region Prepare Generators
             chartDistribution.Series.Clear();
             chartDistribution.ResetAutoValues();
 
@@ -240,65 +241,56 @@ namespace ImageClassyfication
             }
 
             generator1.RandomSource = new Random(DateTime.Now.Millisecond);
-            generator2.RandomSource = new Random(DateTime.Now.Millisecond + 10);
+            generator2.RandomSource = new Random(DateTime.Now.Millisecond + 10); 
+            #endregion
 
             chartDistribution.Series.Add(CreateDistributionSerie(generator1));
             chartDistribution.Series.Add(CreateDistributionSerie(generator2));
             chartDistribution.Update();                
 
-            double naiveBayesCounter = 0;
-            double bayesRisk = 0.0;
-            double averageCounter = 0;
-            double nearestCounter = 0;
+
+            double avgAlgorithmCounter = 0.0;
+            double nearestAlgorithmCounter = 0.0;
+            double naiveBayesCounter = 0.0;
 
             for (int i = 0; i < IloscProb; i++)
-            {
-
+            {                   
                 List<PatternClass> wektoryUczace = Common.CreateTeachingVectors(P1, P2, generator1, generator2, IloscWektorow);
-
                 List<PatternClass> obiektyTestowe = Common.CreateSampleObject(generator1, IloscTestowychProbek / 2, 1);
                 obiektyTestowe.InsertRange(obiektyTestowe.Count, Common.CreateSampleObject(generator2, IloscTestowychProbek / 2, 2));
 
-
-
-                NearestAverage averageAlg = new NearestAverage(new EuclideanDistance());
-
-                foreach (PatternClass pClass in obiektyTestowe)
-                {
-                    if (averageAlg.Classify(wektoryUczace, pClass.FeatureVector.Values) == pClass.ClassNumber)
-                    {
-                        averageCounter++;
-                    }
-                }
-
-
-                NearestNeighbour nearestNeighbour = new NearestNeighbour(1, new EuclideanDistance());
-
-                foreach (PatternClass pClass in obiektyTestowe)
-                {
-                    if (nearestNeighbour.Classify(wektoryUczace, pClass.FeatureVector.Values) == pClass.ClassNumber)
-                    {
-                        nearestCounter++;
-                    }
-                }
-
-                NaiveBayes naiveBayes = new NaiveBayes();
-
-                foreach (PatternClass pClass in obiektyTestowe)
-                {
-                    if (naiveBayes.Classify(generator1, generator2, P1, P2, pClass.FeatureVector.Values) == pClass.ClassNumber)
-                    {
-                        naiveBayesCounter++;
-                    }
-                }
-                bayesRisk = naiveBayes.CalculateBayesRisk(generator1, generator2,P1,P2);
+                avgAlgorithmCounter += RunClassyfication(obiektyTestowe, new NearestAverage(new EuclideanDistance()), wektoryUczace);
+                nearestAlgorithmCounter += RunClassyfication(obiektyTestowe, new NearestNeighbour(1, new EuclideanDistance()), wektoryUczace);
+                naiveBayesCounter += RunClassyfication(obiektyTestowe, new NaiveBayes(generator1,generator2,P1,P2), wektoryUczace);
             }
 
-            double nearestAlgorithmError = 100-((nearestCounter *100.0 )/ (IloscTestowychProbek*IloscProb));
-            double avgAlgorithmError = 100-((averageCounter*100.0 )/ (IloscTestowychProbek*IloscProb));
-            double naiveBayesError = 100 - ((naiveBayesCounter * 100.0) / (IloscTestowychProbek * IloscProb));
+            double bayesRisk = NaiveBayes.CalculateBayesRisk(generator1, generator2, P1, P2);
 
-            textBoxData.Text = String.Format("Neares : {0} \n Average {1} \n Bayes {2} \n Baies Risk {3}", nearestAlgorithmError, avgAlgorithmError, naiveBayesError, bayesRisk);
+            textBoxData.Text = String.Format("Nearest : {0} \n Average {1} \n Bayes {2} \n Baies Risk {3}",
+                CalculateErrorPercent(nearestAlgorithmCounter, IloscProb, IloscTestowychProbek),
+                CalculateErrorPercent(avgAlgorithmCounter, IloscProb, IloscTestowychProbek),
+                CalculateErrorPercent(naiveBayesCounter,IloscProb, IloscTestowychProbek),
+                bayesRisk);
+        }
+
+        private double CalculateErrorPercent(double counter,double nrOfTries,double nrOfSampleObjects)
+        {
+            return 100 * counter / (nrOfTries * nrOfSampleObjects);
+        }
+
+        private double RunClassyfication(List<PatternClass> obiektyTestowe, IClassyfiAlgorithm algorithm, List<PatternClass> wektoryUczace)
+        {
+            double counter = 0.0;
+
+                foreach (PatternClass pClass in obiektyTestowe)
+                {
+                    if (algorithm.Classify(wektoryUczace, pClass.FeatureVector.Values) != pClass.ClassNumber)
+                    {
+                        counter++;
+                    }
+                }
+
+            return counter;
         }
 
 
@@ -312,6 +304,7 @@ namespace ImageClassyfication
 
         private void btnCalculate2Dim_Click(object sender, EventArgs e)
         {
+            #region Prepare Generators
             chartFirstFeatureDistribution.Series.Clear();
             chartFirstFeatureDistribution.ResetAutoValues();
 
@@ -332,80 +325,66 @@ namespace ImageClassyfication
             {
                 generatorFirstFeature1 = new Normal(FirstFeatureA1, FirstFeatureA2);
                 generatorFirstFeature2 = new Normal(FirstFeatureB1, FirstFeatureB2);
-                generatorSecondFeature1 = new Normal(SecondFeatureA1,SecondFeatureA2);
-                generatorSecondFeature2 = new Normal(SecondFeatureB1,SecondFeatureB2);
+                generatorSecondFeature1 = new Normal(SecondFeatureA1, SecondFeatureA2);
+                generatorSecondFeature2 = new Normal(SecondFeatureB1, SecondFeatureB2);
 
             }
             else if (SelectedGenerator == GeneratorType.Uniform)
             {
                 generatorFirstFeature1 = new ContinuousUniform(FirstFeatureA1, FirstFeatureA2);
                 generatorFirstFeature2 = new ContinuousUniform(FirstFeatureB1, FirstFeatureB2);
-                generatorSecondFeature1 = new ContinuousUniform(SecondFeatureA1,SecondFeatureA2);
+                generatorSecondFeature1 = new ContinuousUniform(SecondFeatureA1, SecondFeatureA2);
                 generatorSecondFeature2 = new ContinuousUniform(SecondFeatureB1, SecondFeatureB2);
             }
 
             generatorFirstFeature1.RandomSource = new Random(DateTime.Now.Millisecond);
             generatorFirstFeature2.RandomSource = new Random(DateTime.Now.Millisecond + 10);
             generatorSecondFeature1.RandomSource = new Random(DateTime.Now.Millisecond + 20);
-            generatorSecondFeature2.RandomSource = new Random(DateTime.Now.Millisecond + 30);
+            generatorSecondFeature2.RandomSource = new Random(DateTime.Now.Millisecond + 30); 
+            #endregion
 
             chartFirstFeatureDistribution.Series.Add(CreateDistributionSerie(generatorFirstFeature1));
             chartFirstFeatureDistribution.Series.Add(CreateDistributionSerie(generatorFirstFeature2));
             chartSecondFeatureDistribution.Series.Add(CreateDistributionSerie(generatorSecondFeature1));
             chartSecondFeatureDistribution.Series.Add(CreateDistributionSerie(generatorSecondFeature2));
 
-            List<PatternClass> teachingVectors= Common.Create2DimTeachingVectors(TwoDimP1, TwoDimP2, generatorFirstFeature1, generatorFirstFeature2, generatorSecondFeature1, generatorSecondFeature2, TwoDimNrOfTeachingVectors);
 
-            foreach(Series ser in CreateXYSeries(teachingVectors))
+            //Classyfi objects
+
+            double naiveBayesCounter = 0;
+            double averageCounter = 0;
+            double nearestCounter = 0;
+            List<PatternClass> teachingVectors = null;
+            List<PatternClass> sampleObjects = null;
+
+            for (int i = 0; i < TwoDimNrOfTries; i++)
             {
-                chartXYDistribution.Series.Add(ser);
+
+                teachingVectors = Common.Create2DimTeachingVectors(TwoDimP1, TwoDimP2, generatorFirstFeature1, generatorFirstFeature2, generatorSecondFeature1, generatorSecondFeature2, TwoDimNrOfTeachingVectors);
+                sampleObjects = Common.Create2dimSampleObject(generatorFirstFeature1, generatorSecondFeature1, TwoDimNrOfSamples / 2, 1);
+                sampleObjects.InsertRange(sampleObjects.Count, Common.Create2dimSampleObject(generatorFirstFeature2, generatorSecondFeature2, TwoDimNrOfSamples / 2, 2));
+
+                averageCounter += RunClassyfication(sampleObjects, new NearestAverage(new EuclideanDistance()), teachingVectors);
+                //naiveBayesCounter += RunClassyfication(sampleObjects, new NaiveBayes(generatorFirstFeature1, generatorSecondFeature1, P1, P2));
+                nearestCounter += RunClassyfication(sampleObjects, new NearestNeighbour(3, new EuclideanDistance()), teachingVectors);
             }
 
-            List<PatternClass> sampleObjects = Common.Create2dimSampleObject(generatorFirstFeature1, generatorSecondFeature1, TwoDimNrOfSamples/2, 1);
-            sampleObjects.InsertRange(sampleObjects.Count, Common.Create2dimSampleObject(generatorFirstFeature2, generatorSecondFeature2, TwoDimNrOfSamples/2, 2));
+            double bayesRisk = 0.0;
+            //double bayesRisk = NaiveBayes.CalculateBayesRisk(generatorFirstFeature1,generatorSecondFeature1,P1,P2);
 
-            foreach(Series ser in CreateXYSeries(sampleObjects))
+            textBoxData.Text = String.Format("Neares : {0} \n Average {1} \n Bayes {2} \n Bayes Risk {3} ", CalculateErrorPercent(nearestCounter, TwoDimNrOfTries, TwoDimNrOfTeachingVectors), CalculateErrorPercent(averageCounter, TwoDimNrOfTries, TwoDimNrOfTeachingVectors), CalculateErrorPercent(naiveBayesCounter, TwoDimNrOfTries, TwoDimNrOfTeachingVectors), bayesRisk);
+
+            foreach (Series ser in CreateXYSeries(sampleObjects))
             {
                 chartXYDistribution.Series.Add(ser);
             }
             chartXYDistribution.Update();
 
-            //Classyfi objects
-
-            double naiveBayesCounter = 0;
-            double bayesRisk = 0.0;
-            double averageCounter = 0;
-            double nearestCounter = 0;
-
-            for (int i = 0; i < IloscProb; i++)
+            foreach (Series ser in CreateXYSeries(teachingVectors))
             {
-
-                //NearestAverage averageAlg = new NearestAverage(new EuclideanDistance());
-
-                //foreach (PatternClass pClass in sampleObjects)
-                //{
-                //    if (averageAlg.Classify(teachingVectors, pClass.FeatureVector.Values) == pClass.ClassNumber)
-                //    {
-                //        averageCounter++;
-                //    }
-                //}
-
-
-                NearestNeighbour nearestNeighbour = new NearestNeighbour(1, new EuclideanDistance());
-
-                foreach (PatternClass pClass in sampleObjects)
-                {
-                    if (nearestNeighbour.Classify(teachingVectors, pClass.FeatureVector.Values) == pClass.ClassNumber)
-                    {
-                        nearestCounter++;
-                    }
-                }
+                chartXYDistribution.Series.Add(ser);
             }
 
-            double nearestAlgorithmError = 100 - ((nearestCounter * 100.0) / (IloscTestowychProbek * IloscProb));
-            double avgAlgorithmError = 100 - ((averageCounter * 100.0) / (IloscTestowychProbek * IloscProb));
-
-            textBoxData.Text = String.Format("Neares : {0} \n Average {1} ", nearestAlgorithmError, avgAlgorithmError);
 
             //Put those objects on XY chart green - good classyfication , red - bad classyfication
             //Create statstics

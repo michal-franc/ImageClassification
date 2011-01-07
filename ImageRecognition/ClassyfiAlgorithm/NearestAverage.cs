@@ -23,41 +23,44 @@ namespace PatternRecognition
 
         public int Classify(List<PatternClass> teachingVectors, List<double> classyfiedObject)
         {
-            Dictionary<int, double> averageValues = new Dictionary<int, double>();
-            Dictionary<int, double> sums = new Dictionary<int,double>();
+            int dimensions = teachingVectors.FirstOrDefault().FeatureVector.Values.Count;
 
-            foreach (PatternClass obj in teachingVectors)
+            List<PatternClass> classWithAverages = new List<PatternClass>();
+
+            for(int i=1;i<=2;i++)
             {
-                if (!averageValues.ContainsKey(obj.ClassNumber))
+                PatternClass averageClass = new PatternClass(new FeatureVector(dimensions), i);
+                foreach(PatternClass obj in teachingVectors.Where(x => x.ClassNumber == i) )
                 {
-                    averageValues.Add(obj.ClassNumber, 0);
-                    sums.Add(obj.ClassNumber,0);
+                    int k=0;
+                    foreach(double d in obj.FeatureVector.Values)
+                    {
+                        averageClass.FeatureVector.Values[k]+=d;
+                        k++;
+                    }
                 }
-
-                averageValues[obj.ClassNumber]++;
-                sums[obj.ClassNumber] += obj.FeatureVector.Values[0];
+                classWithAverages.Add(averageClass);
             }
 
-            for (int i = 1; i <= averageValues.Count+1;i++ )
+            foreach (PatternClass averageClass in classWithAverages)
             {
-                if (averageValues.ContainsKey(i))
+                for (int i = 0; i < dimensions;i++ )
                 {
-                    averageValues[i] = sums[i] / averageValues[i];
+                    double value = averageClass.FeatureVector.Values[i];
+                    double count = teachingVectors.Where(x => x.ClassNumber == averageClass.ClassNumber).Count();
+                    averageClass.FeatureVector.Values[i] = value / count;
                 }
             }
 
             int classNumber = 0;
             double min = double.MaxValue;
-            for (int i = 1; i <= averageValues.Count+1;i++ )
+            foreach(PatternClass avgClass in classWithAverages)
             {
-                if (averageValues.ContainsKey(i))
-                {
-                    if (_dist.CalculateDistance(new List<double>() { averageValues[i] }, classyfiedObject) < min)
+                    if (_dist.CalculateDistance(avgClass.FeatureVector.Values, classyfiedObject) < min)
                     {
-                        classNumber = i;
-                        min = _dist.CalculateDistance(new List<double>() { averageValues[i] }, classyfiedObject);
+                        classNumber = avgClass.ClassNumber;
+                        min = _dist.CalculateDistance(avgClass.FeatureVector.Values, classyfiedObject);
                     }
-                } 
             }
             return classNumber;
         }

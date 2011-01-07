@@ -21,5 +21,14 @@ namespace PatternRecognition
                 Values.Add(d);
             }
         }
+
+        public FeatureVector(int dimensions)
+        {
+            Values = new List<double>();
+            for (int i = 0; i < dimensions;i++ )
+            {
+                Values.Add(0);
+            }
+        }
     }
 }

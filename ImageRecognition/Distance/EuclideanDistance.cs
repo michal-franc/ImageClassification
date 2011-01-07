@@ -27,7 +27,7 @@ namespace PatternRecognition
                 sum += Math.Pow(Math.Abs(x1[i] - x2[i]), 2);
             }
 
-            return Math.Sqrt(sum); ;
+            return Math.Sqrt(sum);
         }
 
         #endregion

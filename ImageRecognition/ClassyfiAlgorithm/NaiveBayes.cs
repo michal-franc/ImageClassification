@@ -7,22 +7,26 @@ using MathNet.Numerics.Distributions;
 
 namespace ImageRecognition.ClassyfiAlgorithm
 {
-    public class NaiveBayes 
+    public class NaiveBayes  : IClassyfiAlgorithm
     {
-        /// <summary>
-        /// Classyfies the specified object to one of the class using the Naive Bayes classsificator
-        /// </summary>
-        /// <param name="gen1"></param>
-        /// <param name="gen2"></param>
-        /// <param name="p1">Propability of the 1st class</param>
-        /// <param name="p2">Propability of the 2nd class</param>
-        /// <param name="klasyfikowanyObiekt"></param>
-        /// <returns></returns>
-        public int Classify(IContinuousDistribution gen1,IContinuousDistribution gen2, double p1, double p2, List<double> klasyfikowanyObiekt)
+        public double P1 {get;set;}
+        public double P2 {get;set;}
+        public IContinuousDistribution Gen1{get;set;}
+        public IContinuousDistribution Gen2{get;set;}
+
+        public NaiveBayes(IContinuousDistribution gen1,IContinuousDistribution gen2, double p1, double p2)
+        {
+            P1 = p1;
+            P2 = p2;
+            Gen1 = gen1;
+            Gen2 = gen2;
+        }
+
+        public int Classify(List<PatternClass> teachingVectors,List<double> klasyfikowanyObiekt)
         {
 
-            double val1 = p1 * gen1.Density(klasyfikowanyObiekt[0]);
-            double val2 = p2 * gen2.Density(klasyfikowanyObiekt[0]);
+            double val1 = P1 * Gen1.Density(klasyfikowanyObiekt[0]);
+            double val2 = P2 * Gen2.Density(klasyfikowanyObiekt[0]);
 
             if (val1 > val2)
                 return 1;
@@ -38,13 +42,10 @@ namespace ImageRecognition.ClassyfiAlgorithm
         /// <param name="p1">Propability of the class in the First Distribution</param>
         /// <param name="p2">Propability of the class in the Second Distribution </param>
         /// <returns></returns>
-        public double CalculateBayesRisk(IContinuousDistribution dist1,IContinuousDistribution dist2,double p1,double p2)
+        public static double CalculateBayesRisk(IContinuousDistribution dist1,IContinuousDistribution dist2,double p1,double p2)
         {
             bool found = false;
             double x = 0.0;
-            double sum = 0.0;
-            double sum1 = 0.0;
-
 
             found = FindCommonPoint(dist1, dist2, ref x);
 
@@ -65,7 +66,7 @@ namespace ImageRecognition.ClassyfiAlgorithm
         /// <param name="dist2">Second Distribution</param>
         /// <param name="commonPoint"></param>
         /// <returns></returns>
-        public bool FindCommonPoint(IContinuousDistribution dist1,IContinuousDistribution dist2,ref double commonPoint)
+        public static bool FindCommonPoint(IContinuousDistribution dist1,IContinuousDistribution dist2,ref double commonPoint)
         {
             bool found = false;
             double step = 0.0;
@@ -96,7 +97,7 @@ namespace ImageRecognition.ClassyfiAlgorithm
         /// <param name="p1"></param>
         /// <param name="p2"></param>
         /// <returns></returns>
-        private double CalculateIntegral(IContinuousDistribution dist1,IContinuousDistribution dist2,double commonPoint,double p1,double p2)
+        private static double CalculateIntegral(IContinuousDistribution dist1,IContinuousDistribution dist2,double commonPoint,double p1,double p2)
         {
 
             double sum = 0.0;
@@ -113,5 +114,10 @@ namespace ImageRecognition.ClassyfiAlgorithm
 
             return (p1 * sum + p2 * sum1) * 100;
         }
+
+        #region IClassyfiAlgorithm Members
+
+
+        #endregion
     }
 }
