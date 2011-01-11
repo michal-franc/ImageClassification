@@ -9,7 +9,7 @@ namespace ImageRecognition
 {
      public static class Common
     {
-         public static ContinuousUniform probabilityGenerator = new ContinuousUniform(0, 1);
+         public static ContinuousUniform probabilityGenerator = null;
 
          /// <summary>
          /// Creates 1 dimensional Teaching Vectors 
@@ -22,7 +22,13 @@ namespace ImageRecognition
          /// <returns></returns>
          public static List<PatternClass> CreateTeachingVectors(double p1, double p2, IContinuousDistribution generator1, IContinuousDistribution generator2, int nrOfTeachingVectors)
         {
+             
              List<PatternClass> createdTeachingVectors = new List<PatternClass>();
+             if (probabilityGenerator == null)
+             {
+                 probabilityGenerator = new ContinuousUniform(0, 1);
+                 probabilityGenerator.RandomSource = new Random(DateTime.Now.Millisecond + 10);
+             }
 
             for (int i = 0; i < nrOfTeachingVectors; i++)
             {
@@ -43,6 +49,11 @@ namespace ImageRecognition
          public static List<PatternClass> Create2DimTeachingVectors(double p1, double p2, IContinuousDistribution generatorFirstFeature1, IContinuousDistribution generatorFirstFeature2, IContinuousDistribution generatorSecondFeature1, IContinuousDistribution generatorSecondFeature2, int nrOfTeachingVectors)
          {
              List<PatternClass> createdTeachingVectors = new List<PatternClass>();
+             if (probabilityGenerator == null)
+             {
+                 probabilityGenerator = new ContinuousUniform(0, 1);
+                 probabilityGenerator.RandomSource = new Random(DateTime.Now.Millisecond + 10);
+             }
 
              for (int i = 0; i < nrOfTeachingVectors; i++)
              {
@@ -90,13 +101,16 @@ namespace ImageRecognition
         /// <param name="count"></param>
         /// <param name="classNumber"></param>
         /// <returns></returns>
-        public static List<PatternClass> CreateSampleObject(IContinuousDistribution generator,int count,int classNumber)
+        public static List<PatternClass> CreateSampleObject(int p1,int p2 ,IContinuousDistribution generator1,IContinuousDistribution generator2,int count)
         {
             List<PatternClass> sampleObjects = new List<PatternClass>();
+            probabilityGenerator = new ContinuousUniform(0, 1);
+            probabilityGenerator.RandomSource = new Random(DateTime.Now.Millisecond + 10);
 
-            for (int i = 0; i < count; i++)
+            int counter = 0; ;
+            for (; counter < count; )
             {
-                sampleObjects.Add(new PatternClass(new FeatureVector(generator.Sample()), classNumber));
+                //sampleObjects.Add(new PatternClass(new FeatureVector(generator.Sample()), classNumber));
             }
             return sampleObjects;
         }
@@ -104,6 +118,9 @@ namespace ImageRecognition
         public static List<PatternClass> Create2dimSampleObject(IContinuousDistribution generator, IContinuousDistribution generator1, int count, int classNumber)
         {
             List<PatternClass> sampleObjects = new List<PatternClass>();
+
+                         probabilityGenerator = new ContinuousUniform(0, 1);
+             probabilityGenerator.RandomSource = new Random(DateTime.Now.Millisecond + 10);
 
             for (int i = 0; i < count; i++)
             {

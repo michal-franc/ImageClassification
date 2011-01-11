@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternRecognition", "ImageRecognition\PatternRecognition.csproj", "{04442BD5-571A-42DF-95CC-4F70DD6BFB72}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageClassyfication", "ImageClassyfication\ImageClassyfication.csproj", "{19380138-E70A-4D50-8193-CAA1D5B11F6A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{1E2C35A9-A3D1-400F-87E4-FAADF0A19D78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternRecognition", "ImageRecognition\PatternRecognition.csproj", "{04442BD5-571A-42DF-95CC-4F70DD6BFB72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,16 +17,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|Any CPU.Build.0 = Release|Any CPU
-		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|x86.ActiveCfg = Release|Any CPU
 		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{19380138-E70A-4D50-8193-CAA1D5B11F6A}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -47,6 +37,16 @@ Global
 		{1E2C35A9-A3D1-400F-87E4-FAADF0A19D78}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1E2C35A9-A3D1-400F-87E4-FAADF0A19D78}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1E2C35A9-A3D1-400F-87E4-FAADF0A19D78}.Release|x86.ActiveCfg = Release|Any CPU
+		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{04442BD5-571A-42DF-95CC-4F70DD6BFB72}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

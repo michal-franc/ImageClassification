@@ -10,7 +10,7 @@ namespace PatternRecognition
     /// </summary>
     public class NearestNeighbour : IClassyfiAlgorithm
     {
-        private int _alpha = 2;
+        private int _alpha;
         IDistanceAlgorithm _dist;
 
         public NearestNeighbour(int alpha, IDistanceAlgorithm dist)
@@ -22,13 +22,9 @@ namespace PatternRecognition
 
         public int Classify(List<PatternClass> teachingVectors, List<double> classyfiedObject)
         {
-            double min = double.MaxValue;
             foreach (PatternClass pClass in teachingVectors)
             {
-                if (_dist.CalculateDistance(pClass.FeatureVector.Values, classyfiedObject) < min)
-                {
                     pClass.Distance = _dist.CalculateDistance(pClass.FeatureVector.Values, classyfiedObject);
-                }
             }
 
             var sortedDistances = from w in teachingVectors orderby w.Distance ascending select w;
@@ -50,8 +46,8 @@ namespace PatternRecognition
                     break;
                 }
             }
-
-            return (from w in classCounter orderby w.Value descending select w.Key).First();
+            var order = from w in classCounter orderby w.Value descending select w.Key;
+            return order.First();
         }
 
         #endregion
